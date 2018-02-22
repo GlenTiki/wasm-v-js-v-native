@@ -1,0 +1,10 @@
+[package]
+name = "wasm-v-js-v-native"
+version = "0.1.0"
+authors = ["Glen Keane <glenkeane.94@gmail.com>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+integer-sqrt = "0.1.0"

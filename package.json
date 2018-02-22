@@ -1,0 +1,22 @@
+{
+  "name": "wasm-v-js-v-native",
+  "version": "1.0.0",
+  "description": "A comparison of wasm vs js vs native building of top of fhinkels awesome article",
+  "main": "index.js",
+  "scripts": {
+    "cc-build": "node-gyp rebuild",
+    "rs-build": "cargo +nightly build --target wasm32-unknown-unknown --release && cp ./target/wasm32-unknown-unknown/release/wasm_v_js_v_native.wasm ./build/Release/primes.wasm",
+    "wasm-minify": "wasm-gc ./build/Release/primes.wasm -o ./build/Release/primes.min.wasm",
+    "requirify-wasm": "echo \"module.exports = new WebAssembly.Instance(WebAssembly.Module(new Uint8Array([`node -e \"console.log(new Uint8Array(fs.readFileSync('./build/Release/primes.min.wasm')).toString())\"`]))).exports\" > ./build/release/primes.wasm.js",
+    "install": "npm run cc-build && npm run rs-build && npm run wasm-minify && npm run requirify-wasm",
+    "benchmark": "node ./benchmark.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "gypfile": true,
+  "dependencies": {
+    "node-addon-api": "^1.2.0",
+    "node-gyp": "^3.6.2"
+  },
+  "devDependencies": {}
+}
