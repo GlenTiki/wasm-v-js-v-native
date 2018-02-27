@@ -1,11 +1,9 @@
 const js = require('./primes.js');
 const addon = require('./build/Release/primes.node');
-const wasm = require('./build/Release/primes.wasm.js');
+const wasm = require('./load-wasm.js');
+const convertHrtime = require('convert-hrtime')
 
 console.log("Hello performance friends.");
-console.log();
-
-console.log('sqrt(9)', wasm.sqrt(9));
 console.log();
 
 function sanityCheck(n, expected) {
@@ -21,19 +19,21 @@ function sanityCheck(n, expected) {
 }
 
 function run(i) {
-  console.log(i);
+  const primesCalcsTimes = [i];
 
-  console.time('Prime in js');
+  const jsTime = process.hrtime();
   js.prime(i);
-  console.timeEnd('Prime in js');
+  primesCalcsTimes.push(convertHrtime(process.hrtime(jsTime)).milliseconds);
 
-  console.time('Prime in addon');
+  const addonTime = process.hrtime();
   addon.prime(i)
-  console.timeEnd('Prime in addon');
+  primesCalcsTimes.push(convertHrtime(process.hrtime(addonTime)).milliseconds);
 
-  console.time('Prime in wasm');
+  const wasmTime = process.hrtime();
   wasm.prime(i)
-  console.timeEnd('Prime in wasm');
+  primesCalcsTimes.push(convertHrtime(process.hrtime(wasmTime)).milliseconds);
+
+  console.log(primesCalcsTimes.toString())
 }
 
 // Compute lots of primes.

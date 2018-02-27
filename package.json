@@ -4,19 +4,27 @@
   "description": "A comparison of wasm vs js vs native building of top of fhinkels awesome article",
   "main": "index.js",
   "scripts": {
+    "prebuild": "mkdirp ./build && rimraf ./build/*",
     "cc-build": "node-gyp rebuild",
-    "rs-build": "cargo +nightly build --target wasm32-unknown-unknown --release && cp ./target/wasm32-unknown-unknown/release/wasm_v_js_v_native.wasm ./build/Release/primes.wasm",
-    "wasm-minify": "wasm-gc ./build/Release/primes.wasm -o ./build/Release/primes.min.wasm",
-    "requirify-wasm": "echo \"module.exports = new WebAssembly.Instance(WebAssembly.Module(new Uint8Array([`node -e \"console.log(new Uint8Array(fs.readFileSync('./build/Release/primes.min.wasm')).toString())\"`]))).exports\" > ./build/release/primes.wasm.js",
-    "install": "npm run cc-build && npm run rs-build && npm run wasm-minify && npm run requirify-wasm",
-    "benchmark": "node ./benchmark.js"
+    "rs-build": "cargo +nightly build --target wasm32-unknown-unknown --release",
+    "gc-wasm": "wasm-gc target/wasm32-unknown-unknown/release/wasm_v_js_v_native.wasm -o build/wasm_v_js_v_native.min.wasm",
+    "requirify-wasm": "requirise-wasm -i ./build/wasm_v_js_v_native.min.wasm -o ./build/wasm.js",
+    "build": "npm run rs-build && npm run cc-build",
+    "postbuild": "npm run gc-wasm && npm run requirify-wasm",
+    "benchmark": "npm run build && node ./benchmark.js",
+    "pretest": "npm run build",
+    "test": "standard && tap ./test.js && cargo test",
+    "prepack": "npm run test"
   },
   "author": "",
   "license": "MIT",
   "gypfile": true,
   "dependencies": {
+    "convert-hrtime": "^2.0.0",
+    "initialise-wasm": "0.0.1",
     "node-addon-api": "^1.2.0",
-    "node-gyp": "^3.6.2"
+    "node-gyp": "^3.6.2",
+    "requirise-wasm": "0.0.2"
   },
   "devDependencies": {}
 }
