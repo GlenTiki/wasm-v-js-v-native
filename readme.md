@@ -4,7 +4,11 @@ A repo to benchmark web assembly generated with rust against javascript and a na
 
 Heavily inspired by and uses code from: https://medium.com/the-node-js-collection/speed-up-your-node-js-app-with-native-addons-5e76a06f4a40
 
-## setup
+## Graph
+
+<img src="./graph.png"></img>
+
+## Setup
 
 To run the benchmarks, you need to rust setup to compile to wasm-unknown-unknown. Check this repo for instruction on how to do that: https://github.com/rust-lang-nursery/rust-wasm
 
