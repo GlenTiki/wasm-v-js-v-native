@@ -8,6 +8,8 @@ Heavily inspired by and uses code from: https://medium.com/the-node-js-collectio
 
 To run the benchmarks, you need to rust setup to compile to wasm-unknown-unknown. Check this repo for instruction on how to do that: https://github.com/rust-lang-nursery/rust-wasm
 
+You'll also need wasm-gc installed: https://github.com/alexcrichton/wasm-gc
+
 Clone this repo
 
 Run `npm install`
